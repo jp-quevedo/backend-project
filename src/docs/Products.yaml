@@ -1,0 +1,221 @@
+paths:
+
+  /api/products:
+    get:
+      summary: get all products
+      tags:
+        - products
+      responses:
+        '200':
+          description: all products found
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    post:
+      summary: create one product
+      tags:
+        - products
+      parameters:
+        - title: id
+          in: path
+          description: product identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: one product created
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/product'
+              example:
+                id: aaaabbbbccccdddd
+                title: iphone 12 pro
+                description: phone description
+                code: code
+                price: 600
+                status: true
+                stock: 50
+                category: cellphones
+                owner: apple@mail.com
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    
+  /api/products/{id}:
+    get:
+      summary: get product by id
+      tags:
+        - products
+      parameters:
+        - title: id
+          in: path
+          description: product identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: one product found
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/product'
+              example:
+                id: aaaabbbbccccdddd
+                title: iphone 12 pro
+                description: phone description
+                code: code
+                price: 600
+                status: true
+                stock: 50
+                category: cellphones
+                owner: apple@mail.com
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    delete:
+      summary: delete product by id
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          description: product identifier
+      responses:
+        '200':
+          description: one product deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '500':
+          description: server error
+        '400':
+          description: some data is missing   
+    put:
+      summary: update product by id
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          description: product identifier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        '200':
+          description: one product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+              example:
+                title: iphone 12 pro
+                description: phone description
+                code: code
+                price: 600
+                status: true
+                stock: 50
+                category: cellphones
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+  
+  /api/products/filter:
+    get:
+      summary: filter and pagination tools to find products
+      tags:
+        - products
+      responses:
+        '200':
+          description: products found
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+  /api/products/aggregation:
+    get:
+      summary: grouping tools to compare products
+      tags:
+        - products
+      responses:
+        '200':
+          description: products found
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        owner:
+          type: string
+      example:
+        id: aaaabbbbccccdddd
+        title: iphone 12 pro
+        description: phone description
+        code: code
+        price: 600
+        status: true
+        stock: 50
+        category: cellphones
+        owner: apple@mail.com
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+      example:
+        title: iphone 12 pro
+        description: phone description
+        code: code
+        price: 600
+        status: true
+        stock: 50
+        category: cellphones

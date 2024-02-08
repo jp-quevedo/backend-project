@@ -1,0 +1,9 @@
+<h2>Sign Up</h2>
+<form id='createUserForm' action='/api/sessions/signup' method='post'>
+    Name: <input type='text' name='name' id='userName'>
+    Email: <input type='email' name='email' id='userEmail'>
+    Password: <input type='password' name='password' id='userPassword'>
+    <input type='submit' value='Sign Up'>
+</form>
+<p>or</p>
+<button onclick="location.href='/api/sessions/github'">Sign Up through GitHub</button>

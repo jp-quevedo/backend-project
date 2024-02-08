@@ -1,0 +1,71 @@
+<div>
+    <h2>Create Product</h2>
+    <form id='createForm' method='post'>
+        Title: <input type='text' name='productTitle' id='productTitle'>
+        Description: <input type='text' name='productDescription' id='productDescription'>
+        Code: <input type='text' name='productCode' id='productCode'>
+        Price: <input type='number' name='productPrice' id='productPrice'>
+        Status: <input type='text' name='productStatus' id='productStatus'>
+        Stock: <input type='number' name='productStock' id='productStock'>
+        Category: <input type='text' name='productCategory' id='productCategory'>
+        <input type='submit' value='Create'>
+    </form>
+</div>
+
+<div>
+    <h2>Update Product</h2>
+    <form id='updateProductForm' method='post'>
+        Id: <input type='text' name='productIdUpdate' id='productIdUpdate'>
+        Title: <input type='text' name='productTitleUpdate' id='productTitleUpdate'>
+        Description: <input type='text' name='productDescriptionUpdate' id='productDescriptionUpdate'>
+        Code: <input type='text' name='productCodeUpdate' id='productCodeUpdate'>
+        Price: <input type='number' name='productPriceUpdate' id='productPriceUpdate'>
+        Status: <input type='text' name='productStatusUpdate' id='productStatusUpdate'>
+        Stock: <input type='number' name='productStockUpdate' id='productStockUpdate'>
+        Category: <input type='text' name='productCategoryUpdate' id='productCategoryUpdate'>
+        <input type='submit' value='Update'>
+    </form>
+</div>
+
+<div>
+    <h2>Delete Product</h2>
+    <form id='deleteForm'>
+        Id: <input type='string' name='deletingProductId' id='deletingProductId'>
+        <input type='submit' value='Delete'>
+    </form>
+</div>
+
+<div>
+    <h2>Products Available</h2>
+    <table id='rtpTable'>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Stock</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{title}}</td>
+                <td>{{description}}</td>
+                <td>{{code}}</td>
+                <td>{{price}}</td>
+                <td>{{status}}</td>
+                <td>{{stock}}</td>
+                <td>{{category}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/products.js'></script>

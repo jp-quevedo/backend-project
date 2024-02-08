@@ -1,0 +1,99 @@
+<div>
+    <h2>Create Cart</h2>
+    <form id='createCartForm' method='post'>
+        <input type='submit' value='Create'>
+    </form>
+</div>
+
+<div>
+    <h2>Add Products to a Cart</h2>
+    <form id='updateCartForm'>
+        Cart Id: <input type='string' name='updatingCartId' id='updatingCartId'>
+        Product Id: <input type='string' name='productsInAddP' id='productsInAddP'>
+        <input type='submit' value='Add Product'>
+    </form>
+</div>
+
+<div>
+    <h2>Delete Products from a Cart</h2>
+    <form id='deletePFCartForm'>
+        Cart Id: <input type='string' name='deletePFCartId' id='deletePFCartId'>
+        Product Id: <input type='string' name='deletingProduct' id='deletingProduct'>
+        <input type='submit' value='Delete Product'>
+    </form>
+</div>
+
+<div>
+    <h2>Confirm Purchase</h2>
+    <form id='purchaseCartForm' method='post'>
+        Email: <input type='email' name='email' id='userEmail'>
+        Cart Id: <input type='string' name='purchasingCartId' id='purchasingCartId'>
+        <input type='submit' value='Purchase'>
+    </form>
+</div>
+
+<div>
+    <h2>Delete Cart</h2>
+    <form id='deleteCartForm'>
+        Id: <input type='string' name='deletingCartId' id='deletingCartId'>
+        <input type='submit' value='Delete'>
+    </form>
+</div>
+
+<div>
+    <h2>Carts Available</h2>
+    <table id='cTable'>
+        <thead>
+            <tr>
+                <th>Cart Id</th>
+                <th>Products</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each productsArray}}
+                <tr>
+                    <td>{{this._id}}</td>
+                    {{#each this.products}}
+                        <td>{{this.title}}</td>
+                        <td>${{this.price}} </td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Products Available</h2>
+    <table id='rtpTable'>
+        <thead>
+            <tr>
+                <th>Products Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Stock</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{title}}</td>
+                <td>{{description}}</td>
+                <td>{{code}}</td>
+                <td>${{price}}</td>
+                <td>{{status}}</td>
+                <td>{{stock}}</td>
+                <td>{{category}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/carts.js'></script>

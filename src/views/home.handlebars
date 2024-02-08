@@ -1,0 +1,80 @@
+<div>
+    <h2>Products</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Stock</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{title}}</td>
+                <td>{{description}}</td>
+                <td>{{code}}</td>
+                <td>${{price}}</td>
+                <td>{{status}}</td>
+                <td>{{stock}}</td>
+                <td>{{category}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Carts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Products</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each productsArray}}
+                <tr>
+                    <td>{{this._id}}</td>
+                    {{#each this.products}}
+                        <td>{{this.title}}</td>
+                        <td>${{this.price}}, </td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Users</h2>
+    <table id='usersTable'>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Cart Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{name}}</td>
+                <td>{{email}}</td>
+                <td>{{role}}</td>
+                <td>{{cart}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

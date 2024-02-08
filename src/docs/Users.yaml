@@ -1,0 +1,171 @@
+paths:
+
+  /api/users:
+    get:
+      summary: get all users
+      tags:
+        - users
+      responses:
+        '200':
+          description: all users found
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+  /api/users/{id}:
+    get:
+      summary: get user by id
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: user identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: one user found
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/user'
+              example:
+                id: aaaabbbbccccdddd
+                name: matias cordova
+                email: mcordova@mail.com
+                password: password
+                role: user
+                usersCart: aaaabbbbccccdddd
+                token: AABBCC
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    delete:
+      summary: delete user by id
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: user identifier
+      responses:
+        '200':
+          description: one user deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '500':
+          description: server error
+        '400':
+          description: some data is missing    
+    put:
+      summary: update user by id
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: user identifier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateUser'
+      responses:
+        '200':
+          description: one user updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              example:
+                name: matias cordova
+                email: mcordova@mail.com
+                password: password
+                role: user
+                usersCart: aaaabbbbccccdddd
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    
+  /api/users/request:
+    post:
+      summary: user email validation request for password reset
+      tags:
+        - users
+      responses:
+        '200':
+          description: code sent to user email
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+  /api/users/reset:
+    post:
+      summary: password reset successfully
+      tags:
+        - users
+      responses:
+        '200':
+          description: new password set
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        usersCart:
+          type: string
+        token:
+          type: string
+      example:
+        id: aaaabbbbccccdddd
+        name: matias cordova
+        email: mcordova@mail.com
+        password: password
+        role: user
+        usersCart: aaaabbbbccccdddd
+        token: AABBCC
+  requestBodies:
+    updateUser:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        usersCart:
+          type: string
+      example:
+        name: matias cordova
+        email: mcordova@mail.com
+        password: password
+        role: user
+        usersCart: aaaabbbbccccdddd

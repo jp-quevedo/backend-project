@@ -1,0 +1,73 @@
+<div>
+    <h2>Update User</h2>
+    <form id='updateUserForm' method='post'>
+        Id: <input type='text' name='name' id='userIdUpdate'>
+        Name: <input type='text' name='name' id='userNameUpdate'>
+        Email: <input type='email' name='email' id='userEmailUpdate'>
+        Password: <input type='password' name='password' id='userPasswordUpdate'>
+        Role: <input type='text' name='role' id='userRoleUpdate'>
+        Cart Id: <input type='text' name='cart' id='userCartUpdate'>
+        <input type='submit' value='Update'>
+    </form>
+</div>
+
+<div>
+    <h2>Delete User</h2>
+    <form id='deleteUserForm'>
+        Id: <input type='string' name='deletingUserId' id='deletingUserId'>
+        <input type='submit' value='Delete'>
+    </form>
+</div>
+
+<div>
+    <h2>Users Available</h2>
+    <table id='usersTable'>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Cart Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{name}}</td>
+                <td>{{email}}</td>
+                <td>{{role}}</td>
+                <td>{{usersCart.cart}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Carts Available</h2>
+    <table id='cTable'>
+        <thead>
+            <tr>
+                <th>Cart Id</th>
+                <th>Products</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each productsArray}}
+                <tr>
+                    <td>{{this._id}}</td>
+                    {{#each this.products}}
+                        <td>{{this.title}}</td>
+                        <td>${{this.price}} </td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/users.js'></script>
+<script src='/js/carts.js'></script>

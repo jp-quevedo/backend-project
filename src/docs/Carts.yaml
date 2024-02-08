@@ -1,0 +1,222 @@
+paths:
+
+  /api/carts:
+    get:
+      summary: get all carts
+      tags:
+        - carts
+      responses:
+        '200':
+          description: all carts found
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    post:
+      summary: create one cart
+      tags:
+        - carts
+      parameters:
+        - title: id
+          in: path
+          description: cart identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: one cart created
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+              example:
+                id: eeeeffffgggghhhh
+                productsInCart: [
+                  {
+                    product: aaaabbbbccccdddd,
+                    quantity: 5
+                  }
+                ]
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+  
+  /api/carts/{id}:
+    get:
+      summary: get cart by id
+      tags:
+        - carts
+      parameters:
+        - title: id
+          in: path
+          description: cart identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: one cart found
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+              example:
+                id: eeeeffffgggghhhh
+                productsInCart: [
+                  {
+                    product: aaaabbbbccccdddd,
+                    quantity: 5
+                  }
+                ]
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+    delete:
+      summary: delete cart by id
+      tags:
+        - carts
+      parameters:
+        - name: id
+          in: path
+          description: cart identifier
+      responses:
+        '200':
+          description: one cart deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        '500':
+          description: server error
+        '400':
+          description: some data is missing   
+    put:
+      summary: update cart by id
+      tags:
+        - carts
+      parameters:
+        - name: id
+          in: path
+          description: cart identifier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateCart'
+      responses:
+        '200':
+          description: one cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+              example:
+                id: eeeeffffgggghhhh
+                productsInCart: [
+                  {
+                    product: aaaabbbbccccdddd,
+                    quantity: 5
+                  }
+                ]
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+  
+  /api/carts/{id}/purchase:
+    post:
+      summary: procceed to purchase (generate ticket)
+      tags:
+        - carts
+      parameters:
+        - title: id
+          in: path
+          description: cart identifier
+      schemas:
+        content:
+          application/json:
+            schema:
+              $type: string
+      responses:
+        '200':
+          description: ticket generated
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/ticket'
+              example:
+                id: aaaabbbbccccdddd
+                code: eeeeffffgggghhhh
+                purchaser: iiiijjjjkkkkllll
+                purchase_datetime: date
+                cart: mmmmnnnnoooopppp
+        '500':
+          description: server error
+        '400':
+          description: some data is missing
+
+components:
+  schemas:
+    cart:
+      type: object
+      properties:
+        id:
+          type: string
+        productsInCart:
+          type: objects array
+        product:
+          type: string
+        quantity:
+          type: number
+      example:
+        id: eeeeffffgggghhhh
+        productsInCart: [
+          {
+            product: aaaabbbbccccdddd,
+            quantity: 5
+          }
+        ]
+    ticket:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        purchaser:
+          type: string
+        purchase_datetime:
+          type: string
+        cart:
+          type: string
+      example:
+        id: aaaabbbbccccdddd
+        code: eeeeffffgggghhhh
+        purchaser: iiiijjjjkkkkllll
+        purchase_datetime: date
+        cart: mmmmnnnnoooopppp
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        productsInCart:
+          type: objects array
+        product:
+          type: string
+        quantity:
+          type: number
+      example:
+        id: eeeeffffgggghhhh
+        productsInCart: [
+          {
+            product: aaaabbbbccccdddd,
+            quantity: 5
+          }
+        ]
