@@ -10,6 +10,7 @@ const productPrice = document.getElementById('productPrice')
 const productStatus = document.getElementById('productStatus')
 const productStock = document.getElementById('productStock')
 const productCategory = document.getElementById('productCategory')
+const productOwner = document.getElementById('productOwner')
 
 // UPDATE IMPORT
 
@@ -22,6 +23,7 @@ const productPriceUpdate = document.getElementById('productPriceUpdate')
 const productStatusUpdate = document.getElementById('productStatusUpdate')
 const productStockUpdate = document.getElementById('productStockUpdate')
 const productCategoryUpdate = document.getElementById('productCategoryUpdate')
+const productOwnerUpdate = document.getElementById('productOwnerUpdate')
 
 // DELETE IMPORT
 
@@ -43,7 +45,8 @@ createForm.onsubmit = (e) => {
         productPrice.value == '' ||
         productStatus.value == '' ||
         productStock.value == '' ||
-        productCategory.value == ''
+        productCategory.value == '' ||
+        productOwner.value == ''
         ) {
             Swal.fire({
                 icon: 'error',
@@ -58,13 +61,14 @@ createForm.onsubmit = (e) => {
             status: productStatus.value,
             stock: productStock.value,
             category: productCategory.value,
+            owner: productOwner.value,
         }
         socketClient.emit('createProduct', newProduct)
     }
 }
 
 socketClient.on('productCreated', (creatingProduct) => {
-    const { _id, title, description, code, price, status, stock, category } = creatingProduct
+    const { _id, title, description, code, price, status, stock, category, owner } = creatingProduct
     const productRow = `
         <tr>
             <td>${_id}</td>
@@ -75,6 +79,7 @@ socketClient.on('productCreated', (creatingProduct) => {
             <td>${status}</td>
             <td>${stock}</td>
             <td>${category}</td>
+            <td>${owner}</td>
         </tr>
     `
     rtpTable.innerHTML += productRow
@@ -91,7 +96,8 @@ updateProductForm.onsubmit = (e) => {
         productPriceUpdate.value == '' ||
         productStatusUpdate.value == '' ||
         productStockUpdate.value == '' ||
-        productCategoryUpdate.value == ''
+        productCategoryUpdate.value == '' ||
+        productOwnerUpdate.value == ''
     ) {
         Swal.fire({
             icon: 'error',
@@ -107,6 +113,7 @@ updateProductForm.onsubmit = (e) => {
             status: productStatusUpdate.value,
             stock: productStockUpdate.value,
             category: productCategoryUpdate.value,
+            owner: productOwnerUpdate.value,
         }
         socketClient.emit('updateProduct', newProductUpdate)
     }
@@ -123,6 +130,7 @@ socketClient.on('productUpdated', (newProductUpdated) => {
             <th>Status</th>
             <th>Stock</th>
             <th>Category</th>
+            <th>Owner</th>
         </tr>
     </thead>`
     newProductUpdated
@@ -136,6 +144,7 @@ socketClient.on('productUpdated', (newProductUpdated) => {
             <td>${objProducts.status}</td>
             <td>${objProducts.stock}</td>
             <td>${objProducts.category}</td>
+            <td>${objProducts.owner}</td>
         </tr>`)
     rtpTable.innerHTML = products
 })
@@ -166,6 +175,7 @@ socketClient.on('productDeleted', (newProductsArray) => {
             <th>Status</th>
             <th>Stock</th>
             <th>Category</th>
+            <th>Owner</th>
         </tr>
     </thead>`
     newProductsArray
@@ -179,6 +189,7 @@ socketClient.on('productDeleted', (newProductsArray) => {
             <td>${objProducts.status}</td>
             <td>${objProducts.stock}</td>
             <td>${objProducts.category}</td>
+            <td>${objProducts.owner}</td>
         </tr>`)
     rtpTable.innerHTML = products
 })

@@ -19,6 +19,7 @@ import cartsManager from './dao/managers/carts.manager.js'
 import chatsManager from './dao/managers/chats.manager.js'
 import productsManager from './dao/managers/products.manager.js'
 import usersManager from './dao/managers/users.manager.js'
+import ticketsManager from './dao/managers/tickets.manager.js'
 
 import { __dirname, hashData } from './utils/utils.js'
 import { ErrorMessages } from './middlewares/errors/error.enum.js'
@@ -168,7 +169,16 @@ socketServer.on('connection', (socket) => {
                     if(product.quantity <= cartP.stock) {
                         cartP.stock -= product.quantity
                         cartP.save()
-                        // generar el ticket
+                        const sum = ticketsManager.priceCalculator(cart)
+                        const newTicket = { 
+                            code: await hashData('1234'),
+                            purchaser: user._id,
+                            purchase_datetime: new Date(),
+                            cart: cart,
+                            total: sum
+                        }
+                        const creatingTicket = await ticketsManager.createOne(newTicket)
+                        console.log('ticket', creatingTicket)
                     }
                 })
                 
@@ -198,13 +208,19 @@ socketServer.on('connection', (socket) => {
     // PRODUCTS
 
     socket.on('createProduct', async(newProduct) => {
-        const creatingProduct = await productsManager.createOne(newProduct)
-        socket.emit('productCreated', creatingProduct)
+        const productOwner = await usersManager.findByEmail(newProduct.owner)
+        if (!productOwner) {
+            return CustomError.createError(ErrorMessages.PRODUCT_NOT_FOUND)
+        } else {
+            const creatingProduct = await productsManager.createOne({...newProduct, owner: productOwner})
+            socket.emit('productCreated', creatingProduct)
+        }
     })
 
     socket.on('updateProduct', async(newProductUpdate) => {
         const updatingProduct = await productsManager.findById(newProductUpdate._id)
-        if (updatingProduct) {
+        const productOwner = await usersManager.findByEmail(newProductUpdate.owner)
+        if (updatingProduct || productOwner) {
             updatingProduct.title = newProductUpdate.title,
             updatingProduct.description = newProductUpdate.description,
             updatingProduct.code = newProductUpdate.code,
@@ -212,8 +228,9 @@ socketServer.on('connection', (socket) => {
             updatingProduct.status = newProductUpdate.status,
             updatingProduct.stock = newProductUpdate.stock,
             updatingProduct.category = newProductUpdate.category
+            updatingProduct.owner.mail = newProductUpdate.owner
             const productUpdateSaved = await updatingProduct.save()
-            const newProductUpdated = await usersManager.findAll()
+            const newProductUpdated = await productsManager.findAll()
             socket.emit('productUpdated', newProductUpdated)
         } else {
             return CustomError.createError(ErrorMessages.PRODUCT_NOT_FOUND)
@@ -267,6 +284,24 @@ socketServer.on('connection', (socket) => {
         }
     })
 
+    socket.on('deleteInactiveUsers', async() => {
+        const users = await usersManager.findAll()
+        const inactiveUsers = users.filter(user => {
+            return user && user.lastConnection && user.lastConnection.date && user.lastConnection.date.getTime() < Date.now() -  60 *  60 * 48 * 1000
+        })
+        inactiveUsers.forEach(user => {
+            const request = {
+                from: 'quevedo.jpg@gmail.com',
+                to: user.email,
+                subject: 'Removing inactive account',
+                text: `We're sorry to inform you that your account is being removed from our server due to inactivity.`
+            }
+            transporter.sendMail(request)
+            })
+        await Promise.all(inactiveUsers.map(user => usersManager.deleteOne(user._id)))
+        socket.emit('usersDeleted', inactiveUsers)
+    })
+
     socket.on('requestNewPass', async(newCodeRequest) => {
         const user = await usersManager.findByEmail(newCodeRequest.email)
         if (user) {
@@ -288,5 +323,3 @@ socketServer.on('connection', (socket) => {
 })
 
 // entrega 16 (test compra), solo falta generar ticket
-// git ignore, subir repo nuevo
-// testing cart, supertest de sessions

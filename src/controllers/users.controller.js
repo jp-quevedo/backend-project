@@ -11,13 +11,13 @@ import { transporter } from '../utils/nodemailer.js'
 import { hashData } from '../utils/utils.js'
 import { docFilter, upload } from '../middlewares/multer.middleware.js'
 
-const docsPath = path.join(process.cwd(), 'images', 'documents')
-const reqDocs = [
-    'identificacion.pdf',
-    'comprobante.pdf',
-    'eecc.pdf'
-]
-const filesInDocs = fs.readdirSync(docsPath)
+// const docsPath = path.join(process.cwd(), 'images', 'documents')
+// const reqDocs = [
+//     'identificacion.pdf',
+//     'comprobante.pdf',
+//     'eecc.pdf'
+// ]
+// const filesInDocs = fs.readdirSync(docsPath)
 
 export const findUsers = async (req, res) => {
     const users = await findAll()
@@ -30,6 +30,19 @@ export const findUsers = async (req, res) => {
     })
     const products = await productsManager.findAll()
     res.render('users', { users, carts, products, productsArray })
+}
+
+export const allUsers = async (req, res) => {
+    const users = await findAll()
+    try {
+        if (users.length == 0) {
+            res.status(400).json( {message: 'Could not find any user' })
+        } else {
+            res.render('allusers', { users })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error })
+    }
 }
 
 export const findUserById = async (req, res) => {
@@ -164,5 +177,22 @@ export const documentPost = async (req, res) => {
         const { _id: id } = req?.params
         const userId = req.body.multer?.userId
         res.send('documents uploaded')
+    }
+}
+
+export const inactiveUser = async (req, res) => {
+    try {
+        const users = await usersManager.findAll()
+        const inactiveUsers = users.filter(user => {
+            return user && user.lastConnection && user.lastConnection.date && user.lastConnection.date.getTime() < Date.now() -  60 *  60 * 48 * 1000
+        })
+        await Promise.all(inactiveUsers.map(user => usersManager.deleteOne(user._id)))
+        if (users.length === 0) {
+            res.status(400).json( {message: 'Could not find any user that met the requirements' })
+        } else {
+            res.render('users', users)
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.toString() })
     }
 }

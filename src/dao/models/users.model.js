@@ -6,8 +6,7 @@ const documentSchema = new Schema({
 })
 
 const lastConSchema = new Schema({
-    date: { type: Date, default: Date.now },
-    action: { type: String, enum: ['login', 'logout'], required: true }
+    
 })
 
 const usersSchema = new Schema({
@@ -44,8 +43,17 @@ const usersSchema = new Schema({
         type: String,
         default: '0'
     },
-    document: [documentSchema],
-    lastConnection: [lastConSchema]
+    lastConnection: {
+            date:{
+                type: Date,
+            },
+            action:{
+                type: String,
+                enum: ['login', 'logout'],
+            },
+            _id: false
+        },
+    document: [documentSchema]
 })
 
 export const usersModel = model('Users', usersSchema)

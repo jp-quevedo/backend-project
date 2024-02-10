@@ -8,6 +8,7 @@
         Status: <input type='text' name='productStatus' id='productStatus'>
         Stock: <input type='number' name='productStock' id='productStock'>
         Category: <input type='text' name='productCategory' id='productCategory'>
+        Owner: <input type='text' name='productOwner' id='productOwner'>
         <input type='submit' value='Create'>
     </form>
 </div>
@@ -23,6 +24,7 @@
         Status: <input type='text' name='productStatusUpdate' id='productStatusUpdate'>
         Stock: <input type='number' name='productStockUpdate' id='productStockUpdate'>
         Category: <input type='text' name='productCategoryUpdate' id='productCategoryUpdate'>
+        Owner: <input type='text' name='productOwnerUpdate' id='productOwnerUpdate'>
         <input type='submit' value='Update'>
     </form>
 </div>
@@ -48,6 +50,7 @@
                 <th>Status</th>
                 <th>Stock</th>
                 <th>Category</th>
+                <th>Owner</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +64,7 @@
                 <td>{{status}}</td>
                 <td>{{stock}}</td>
                 <td>{{category}}</td>
+                <td>{{owner.email}}</td>
             </tr>
             {{/each}}
         </tbody>

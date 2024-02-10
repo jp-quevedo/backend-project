@@ -8,32 +8,23 @@ class TicketsManager extends BasicManager {
         super(ticketsModel, 'cart._id')
     }
 
-    async generateTicket(obj) {
-        try {
+    async createOne(obj) {
             const {
                 code = await hashData(math.random()),
                 purchaser = user._id,
                 purchase_datetime = new Date(),
-                cart = user.usersCart,
+                cart = cart,
+                total = sum
             } = obj
             return obj
-        } catch (error) {
-            return error
-        }
     }
 
-    async priceCalculator() {
+    async priceCalculator(cart) {
         let total = 0
-        productsInCart.forEach((product) => {
+        cart.productsInCart.forEach((product) => {
             total += product.quantity * product.product.price
         })
         return total
-    }
-
-    async stockCalculator() {
-        const productStock = productsInCart.forEach((product) => { product.product.stock })
-        const stockUpdate = productStock ? product.product.stock - productsInCart.quantity : product.product.stock
-        return stockUpdate
     }
 
 }

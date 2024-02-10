@@ -52,6 +52,9 @@ passport.use('login', new localStrategy(
             if (!comparePassword) {
                 return done(null, false)
             }
+            const update = { date: Date.now(), action: 'login' }
+            userInDB.lastConnection = update
+            const loginInfo = await userInDB.save()
             done(null, userInDB)
         } catch (error) {
             done(error)

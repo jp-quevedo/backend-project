@@ -12,6 +12,7 @@ const userCartUpdate = document.getElementById('userCartUpdate')
 
 // DELETE IMPORT
 
+const deleteInactiveForm = document.getElementById('deleteInactiveForm')
 const deleteUserForm = document.getElementById('deleteUserForm')
 const deletingUserId = document.getElementById('deletingUserId')
 
@@ -65,6 +66,7 @@ socketClient.on('userUpdated', (newUserUpdated) => {
             <th>Email</th>
             <th>Role</th>
             <th>Cart Id</th>
+            <th>Last Connection</th>
         </tr>
     </thead>`
     newUserUpdated
@@ -75,6 +77,7 @@ socketClient.on('userUpdated', (newUserUpdated) => {
             <td>${objUsers.email}</td>
             <td>${objUsers.role}</td>
             <td>${objUsers.usersCart}</td>
+            <td>${lastConnection.date}</td>
         </tr>`)
     usersTable.innerHTML = users
 })
@@ -102,6 +105,7 @@ socketClient.on('userDeleted', (newUsersArray) => {
             <th>Email</th>
             <th>Role</th>
             <th>Cart Id</th>
+            <th>Last Connection</th>
         </tr>
     </thead>`
     newUsersArray
@@ -112,6 +116,36 @@ socketClient.on('userDeleted', (newUsersArray) => {
             <td>${objUsers.email}</td>
             <td>${objUsers.role}</td>
             <td>${objUsers.usersCart}</td>
+            <td>${lastConnection.date}</td>
+        </tr>`)
+    usersTable.innerHTML = users
+})
+
+deleteInactiveForm.onsubmit = (e) => {
+    e.preventDefault()
+    socketClient.emit('deleteInactiveUsers')
+}
+
+socketClient.on('usersDeleted', (inactiveUsers) => {
+    let users = `<thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Cart Id</th>
+            <th>Last Connection</th>
+        </tr>
+    </thead>`
+    inactiveUsers
+        .map((objUsers) => 
+        users += `<tr>
+            <td>${objUsers._id}</td>
+            <td>${objUsers.name}</td>
+            <td>${objUsers.email}</td>
+            <td>${objUsers.role}</td>
+            <td>${objUsers.usersCart}</td>
+            <td>${lastConnection.date}</td>
         </tr>`)
     usersTable.innerHTML = users
 })

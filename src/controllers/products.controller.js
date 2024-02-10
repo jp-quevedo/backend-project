@@ -1,3 +1,4 @@
+import usersManager from '../dao/managers/users.manager.js'
 import { 
     findAll,
     findById,
@@ -7,6 +8,7 @@ import {
     productsFilter,
     aggregation
 } from '../features/services/products.service.js'
+import { transporter } from '../utils/nodemailer.js'
 
 export const findProducts = async (req, res) => {
     const products = await findAll()
@@ -42,14 +44,24 @@ export const createProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     const { _id: id } = req.params
-    const user = req.session.user
+    const user = await usersManager.findById(req.session.passport.user)
     try {
         const product = await findById(id)
         if (user.email == product.owner.email || user.role == 'admin') {
+            const premiumUser = await usersManager.findByEmail(product.owner.email)
             const response = await deleteOne(id, req.body)
             if (response === -1) {
                 res.status(400).json({ message: 'Could not find any product with the id sent' })
             } else {
+                if (premiumUser.role == premium) {
+                    const request = {
+                        from: 'quevedo.jpg@gmail.com',
+                        to: premiumUser.email,
+                        subject: 'product removal',
+                        text: `We're sorry to inform you that we are removing following product of our database ${product._id}`
+                    }
+                    await transporter.sendMail(request)
+                }
                 res.status(200).json({ message: 'Product deleted' })
             }
         }
