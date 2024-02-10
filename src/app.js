@@ -321,5 +321,3 @@ socketServer.on('connection', (socket) => {
     })
 
 })
-
-// entrega 16 (test compra), solo falta generar ticket
